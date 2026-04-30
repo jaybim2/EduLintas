@@ -1,0 +1,833 @@
+/* Modern, Minimalist, Educative Styling for EduLintas */
+:root {
+    /* Emerald Green for professional & friendly accent */
+    --primary-color: #059669;
+    --primary-hover: #047857;
+    --primary-light: rgba(5, 150, 105, 0.15);
+
+    /* Off-white background as requested */
+    --bg-color: #F8F9FA;
+
+    /* Text Colors */
+    --text-dark: #1F2937;
+    --text-light: #F9FAFB;
+
+    /* System variables */
+    --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    --font-main: 'Inter', sans-serif;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: var(--font-main);
+    background-color: var(--bg-color);
+    color: var(--text-dark);
+    line-height: 1.6;
+    overflow-x: hidden;
+}
+
+/* Typography and utilities */
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+ul {
+    list-style: none;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 24px;
+    width: 100%;
+}
+
+/* --- HERO SECTION --- */
+.hero {
+    position: relative;
+    min-height: 100vh;
+    /* High-definition background image */
+    background-image: url(/assets/img/hero-bg.png);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    /* Slight parallax */
+    display: flex;
+    flex-direction: column;
+}
+
+/* Thin dark overlay to ensure text is readable */
+.overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg,
+            rgba(15, 23, 42, 0.85) 0%,
+            rgba(15, 23, 42, 0.4) 100%);
+    z-index: 1;
+}
+
+/* --- NAVBAR --- */
+.navbar {
+    position: relative;
+    z-index: 10;
+    padding: 24px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    transition: var(--transition);
+}
+
+.navbar .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    font-size: 1.75rem;
+    font-weight: 800;
+    color: var(--text-light);
+    letter-spacing: -0.5px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.logo-img {
+    height: 36px;
+    /* Menyesuaikan agar proporsional dengan font 1.75rem */
+    width: auto;
+    border-radius: 6px;
+    object-fit: contain;
+}
+
+.logo span {
+    color: var(--primary-color);
+}
+
+/* Navbar Menu & Hover Effect */
+.nav-links {
+    display: flex;
+    gap: 36px;
+    align-items: center;
+}
+
+.nav-links a {
+    color: rgba(255, 255, 255, 0.85);
+    font-weight: 400;
+    font-size: 0.95rem;
+    position: relative;
+    padding: 8px 0;
+    transition: var(--transition);
+}
+
+/* Interactive underline hover effect */
+.nav-links a::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background-color: var(--primary-color);
+    transition: var(--transition);
+    border-radius: 2px;
+}
+
+.nav-links a:hover,
+.nav-links a.active {
+    color: var(--text-light);
+}
+
+.nav-links a:hover::after,
+.nav-links a.active::after {
+    width: 100%;
+}
+
+.hamburger {
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+    cursor: pointer;
+    z-index: 20;
+}
+
+.hamburger .line {
+    width: 25px;
+    height: 2px;
+    background-color: var(--text-light);
+    transition: var(--transition);
+    border-radius: 2px;
+}
+
+/* --- HERO CONTENT (Storytelling) --- */
+.hero-content {
+    position: relative;
+    z-index: 10;
+    flex-grow: 1;
+    display: flex;
+    align-items: center;
+    padding-top: 60px;
+    padding-bottom: 80px;
+}
+
+.hero-text {
+    max-width: 800px;
+}
+
+/* Eyebrow text */
+.eyebrow {
+    display: inline-flex;
+    align-items: center;
+    color: var(--primary-color);
+    font-weight: 600;
+    font-size: 0.9rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 24px;
+    background: var(--primary-light);
+    padding: 6px 16px;
+    border-radius: 30px;
+    border: 1px solid rgba(5, 150, 105, 0.3);
+    backdrop-filter: blur(4px);
+}
+
+/* Main title - bold and strong */
+.hero-text h1 {
+    font-size: 4.5rem;
+    font-weight: 800;
+    color: var(--text-light);
+    line-height: 1.1;
+    margin-bottom: 24px;
+    letter-spacing: -1.5px;
+}
+
+/* Sub-description - educative, thin font */
+.hero-text p {
+    font-size: 1.25rem;
+    color: rgba(255, 255, 255, 0.85);
+    margin-bottom: 48px;
+    max-width: 650px;
+    font-weight: 300;
+    /* Thin text as requested */
+    line-height: 1.7;
+}
+
+/* Call to Action Buttons */
+.cta-group {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 16px 36px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 1rem;
+    transition: var(--transition);
+    cursor: pointer;
+    letter-spacing: 0.5px;
+}
+
+.btn-primary {
+    background-color: var(--primary-color);
+    color: var(--text-light);
+    box-shadow: 0 4px 14px 0 rgba(5, 150, 105, 0.3);
+}
+
+.btn-primary:hover {
+    background-color: var(--primary-hover);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 24px rgba(5, 150, 105, 0.4);
+}
+
+.btn-outline {
+    background-color: transparent;
+    color: var(--text-light);
+    border: 2px solid rgba(255, 255, 255, 0.6);
+}
+
+.btn-outline:hover {
+    border-color: var(--text-light);
+    background-color: rgba(255, 255, 255, 0.1);
+    transform: translateY(-3px);
+}
+
+/* --- ANIMATIONS --- */
+.fade-in-up {
+    opacity: 0;
+    transform: translateY(30px);
+    animation: fadeInUp 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.delay-1 {
+    animation-delay: 0.2s;
+}
+
+.delay-2 {
+    animation-delay: 0.4s;
+}
+
+.delay-3 {
+    animation-delay: 0.6s;
+}
+
+.delay-4 {
+    animation-delay: 0.8s;
+}
+
+@keyframes fadeInUp {
+    0% {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* --- MAIN SECTIONS --- */
+.section {
+    padding: 100px 0;
+}
+
+.bg-light {
+    background-color: #FFFFFF;
+}
+
+.section-header {
+    margin-bottom: 60px;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.section-header h2 {
+    font-size: 2.5rem;
+    font-weight: 800;
+    margin-bottom: 16px;
+    color: var(--text-dark);
+    letter-spacing: -0.5px;
+}
+
+.section-header p {
+    color: #4B5563;
+    font-size: 1.1rem;
+    max-width: 650px;
+    margin: 0 auto;
+    font-weight: 300;
+}
+
+/* --- CARDS & GRID --- */
+.grid {
+    display: grid;
+    gap: 30px;
+}
+
+.cards-grid {
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+}
+
+.card {
+    background: #FFFFFF;
+    padding: 40px 30px;
+    border-radius: 16px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+    transition: var(--transition);
+    border: 1px solid #F3F4F6;
+}
+
+.card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 15px 30px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -5px rgba(0, 0, 0, 0.05);
+    border-color: var(--primary-light);
+}
+
+.card-icon {
+    font-size: 2.5rem;
+    margin-bottom: 24px;
+    background: var(--primary-light);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 64px;
+    height: 64px;
+    border-radius: 16px;
+}
+
+.card h3 {
+    font-size: 1.25rem;
+    margin-bottom: 12px;
+    font-weight: 700;
+    color: var(--text-dark);
+}
+
+.card p {
+    color: #4B5563;
+    font-size: 0.95rem;
+    line-height: 1.7;
+}
+
+.sub-card {
+    transition: var(--transition);
+    border: 1px solid transparent;
+}
+
+.sub-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.08);
+    border-color: var(--primary-light);
+}
+
+/* --- INFOGRAFIS PLACEHOLDER --- */
+.infografis-placeholder {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    gap: 30px;
+}
+
+.placeholder-box {
+    background: #F8F9FA;
+    border: 2px dashed #D1D5DB;
+    border-radius: 20px;
+    height: 350px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: #6B7280;
+    transition: var(--transition);
+}
+
+.placeholder-box:hover {
+    border-color: var(--primary-color);
+    background: var(--primary-light);
+    color: var(--primary-color);
+    cursor: pointer;
+    transform: scale(1.02);
+}
+
+.emoji-large {
+    font-size: 4rem;
+    margin-bottom: 20px;
+}
+
+/* --- FLEX LAYOUT (Panduan Tilang) --- */
+.flex-layout {
+    display: flex;
+    align-items: center;
+    gap: 60px;
+}
+
+.flex-content {
+    flex: 1;
+}
+
+.flex-content h2 {
+    font-size: 2.5rem;
+    font-weight: 800;
+    margin-bottom: 16px;
+    color: var(--text-dark);
+    letter-spacing: -0.5px;
+}
+
+.flex-content p {
+    color: #4B5563;
+    font-size: 1.1rem;
+    margin-bottom: 30px;
+    font-weight: 300;
+}
+
+.flex-image {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+}
+
+.flex-image img {
+    transition: transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1), filter 0.4s ease;
+}
+
+.flex-image img:hover {
+    transform: translateY(-10px);
+    filter: drop-shadow(0 20px 30px rgba(5, 150, 105, 0.3)) !important;
+}
+
+.check-list li {
+    margin-bottom: 20px;
+    position: relative;
+    padding-left: 44px;
+    color: #374151;
+    font-size: 1.05rem;
+}
+
+.check-list li::before {
+    content: '\2713';
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 28px;
+    height: 28px;
+    background: var(--primary-light);
+    color: var(--primary-color);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.check-list strong {
+    color: var(--text-dark);
+}
+
+.illustration-box {
+    background: #E5E7EB;
+    border-radius: 24px;
+    height: 450px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.emoji-hero {
+    font-size: 8rem;
+    filter: drop-shadow(0 10px 15px rgba(0, 0, 0, 0.1));
+}
+
+/* --- FAQ ACCORDION --- */
+.accordion {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.accordion-item {
+    background: #F8F9FA;
+    border-radius: 12px;
+    margin-bottom: 16px;
+    overflow: hidden;
+    transition: var(--transition);
+}
+
+.accordion-item:hover {
+    background: #F3F4F6;
+}
+
+.accordion-header {
+    padding: 24px 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    font-weight: 600;
+    color: var(--text-dark);
+    font-size: 1.1rem;
+}
+
+.accordion-content {
+    padding: 0 30px;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s ease, padding 0.4s ease;
+    color: #4B5563;
+    font-weight: 300;
+}
+
+.accordion-item.active {
+    background: #FFFFFF;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    border: 1px solid var(--primary-light);
+}
+
+.accordion-item.active .accordion-content {
+    padding: 0 30px 24px 30px;
+    max-height: 300px;
+}
+
+.toggle-icon {
+    font-size: 1.5rem;
+    font-weight: 300;
+    color: var(--primary-color);
+    transition: transform 0.4s ease;
+}
+
+.accordion-item.active .toggle-icon {
+    transform: rotate(45deg);
+}
+
+/* --- FOOTER --- */
+.footer {
+    background: var(--text-dark);
+    color: rgba(255, 255, 255, 0.7);
+    padding: 50px 0;
+    font-size: 0.95rem;
+    font-weight: 300;
+}
+
+
+/* --- DATA STATISTIK --- */
+.stats-section {
+    padding: 60px 0;
+    border-bottom: 1px solid #E5E7EB;
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 30px;
+    text-align: center;
+}
+
+.stat-card {
+    padding: 20px;
+}
+
+.stat-number {
+    font-size: 3.5rem;
+    font-weight: 800;
+    color: var(--primary-color);
+    margin-bottom: 10px;
+    line-height: 1;
+}
+
+.stat-number::after {
+    content: '+';
+    font-size: 2.5rem;
+    vertical-align: top;
+}
+
+.stat-label {
+    font-size: 1.1rem;
+    color: #4B5563;
+    font-weight: 600;
+}
+
+/* --- KUIS INTERAKTIF --- */
+.quiz-container {
+    max-width: 700px;
+    margin: 0 auto;
+    background: #FFFFFF;
+    border-radius: 20px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+    border: 1px solid #E5E7EB;
+    overflow: hidden;
+    position: relative;
+    min-height: 400px;
+}
+
+.quiz-panel {
+    padding: 50px 40px;
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 400px;
+    animation: fadeIn 0.4s ease forwards;
+}
+
+.quiz-panel.active {
+    display: flex;
+}
+
+.quiz-progress {
+    color: var(--primary-color);
+    font-weight: 600;
+    font-size: 0.9rem;
+    margin-bottom: 20px;
+    background: var(--primary-light);
+    padding: 6px 16px;
+    border-radius: 20px;
+}
+
+.quiz-question {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--text-dark);
+    margin-bottom: 30px;
+    line-height: 1.4;
+}
+
+.quiz-options {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    width: 100%;
+}
+
+.quiz-btn {
+    padding: 16px 24px;
+    background: #F8F9FA;
+    border: 2px solid #E5E7EB;
+    border-radius: 12px;
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--text-dark);
+    cursor: pointer;
+    transition: var(--transition);
+    text-align: left;
+    width: 100%;
+}
+
+.quiz-btn:hover {
+    background: #F3F4F6;
+    border-color: #D1D5DB;
+}
+
+.quiz-btn.correct {
+    background: #D1FAE5 !important;
+    border-color: #10B981 !important;
+    color: #065F46 !important;
+}
+
+.quiz-btn.wrong {
+    background: #FEE2E2 !important;
+    border-color: #EF4444 !important;
+    color: #991B1B !important;
+}
+
+.quiz-btn:disabled {
+    cursor: not-allowed;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Modifikasi pada card Materi */
+.pasal-box,
+.denda-box {
+    background: #F8F9FA;
+    padding: 10px 15px;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    margin-bottom: 10px;
+    border-left: 3px solid var(--primary-color);
+    color: #374151;
+}
+
+.denda-box {
+    border-left-color: #EF4444;
+    /* red warning for denda */
+    margin-bottom: 16px;
+}
+
+/* --- RESPONSIVE DESIGN (Mobile Friendly) --- */
+@media (max-width: 992px) {
+    .hero-text h1 {
+        font-size: 3.5rem;
+    }
+
+    .flex-layout {
+        flex-direction: column;
+    }
+
+    .infografis-placeholder {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 768px) {
+    .nav-links {
+        position: fixed;
+        top: 0;
+        right: -100%;
+        height: 100vh;
+        width: 70%;
+        max-width: 300px;
+        background-color: #111827;
+        flex-direction: column;
+        justify-content: center;
+        gap: 30px;
+        transition: var(--transition);
+        z-index: 15;
+        box-shadow: -10px 0 30px rgba(0, 0, 0, 0.5);
+    }
+
+    .nav-links.active-menu {
+        right: 0;
+    }
+
+    .hamburger {
+        display: flex;
+    }
+
+    .hamburger.active .line:nth-child(1) {
+        transform: translateY(7px) rotate(45deg);
+    }
+
+    .hamburger.active .line:nth-child(2) {
+        opacity: 0;
+    }
+
+    .hamburger.active .line:nth-child(3) {
+        transform: translateY(-7px) rotate(-45deg);
+    }
+
+    .hero-text h1 {
+        font-size: 2.75rem;
+    }
+
+    .hero-text p {
+        font-size: 1.1rem;
+    }
+
+    .section-header h2,
+    .flex-content h2 {
+        font-size: 2rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .hero-text h1 {
+        font-size: 2.25rem;
+        letter-spacing: -0.5px;
+    }
+
+    .cta-group {
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .btn {
+        width: 100%;
+    }
+
+    .section {
+        padding: 60px 0;
+    }
+
+    .accordion-header {
+        font-size: 1rem;
+        padding: 20px;
+    }
+
+    .accordion-content {
+        font-size: 0.95rem;
+    }
+}
