@@ -831,3 +831,411 @@ ul {
         font-size: 0.95rem;
     }
 }
+
+/* ==========================================================================
+   NEW WORK: DYNAMIC MULTI-ROLE LOGIN, MODAL & ADMIN STYLING
+   ========================================================================== */
+
+/* Navbar Login Button */
+.btn-login-nav {
+    background-color: var(--primary-color);
+    color: var(--text-light);
+    border: none;
+    padding: 8px 20px;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+    font-size: 0.95rem;
+    font-family: var(--font-main);
+}
+
+.btn-login-nav:hover {
+    background-color: var(--primary-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(5, 150, 105, 0.2);
+}
+
+/* User Profile Badge on Navbar */
+.nav-user-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    padding: 8px 18px;
+    border-radius: 30px;
+    color: var(--text-light);
+    font-weight: 600;
+    cursor: pointer;
+    position: relative;
+    font-size: 0.9rem;
+    transition: var(--transition);
+    user-select: none;
+}
+
+.nav-user-badge:hover {
+    background: rgba(255, 255, 255, 0.15);
+    border-color: var(--primary-color);
+}
+
+.nav-user-badge::after {
+    content: '▼';
+    font-size: 0.7rem;
+    color: var(--primary-color);
+    margin-left: 4px;
+    transition: transform 0.3s ease;
+}
+
+.nav-user-badge.active::after {
+    transform: rotate(180deg);
+}
+
+.nav-user-dropdown {
+    position: absolute;
+    top: calc(100% + 12px);
+    right: 0;
+    background: #111827;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    padding: 8px 0;
+    min-width: 170px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    display: none;
+    z-index: 1000;
+    animation: fadeIn 0.2s ease forwards;
+}
+
+.nav-user-dropdown.active {
+    display: block;
+}
+
+.nav-user-dropdown-item {
+    padding: 10px 20px;
+    color: rgba(255, 255, 255, 0.85);
+    font-size: 0.9rem;
+    text-align: left;
+    cursor: pointer;
+    transition: var(--transition);
+    font-weight: 500;
+}
+
+.nav-user-dropdown-item:hover {
+    background: var(--primary-color);
+    color: var(--text-light);
+}
+
+.nav-user-dropdown-item.logout-item {
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    color: #f87171;
+}
+
+.nav-user-dropdown-item.logout-item:hover {
+    background: #dc2626;
+    color: var(--text-light);
+}
+
+/* Modal Login Window Styles */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(15, 23, 42, 0.7);
+    backdrop-filter: blur(10px);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    opacity: 0;
+    transition: opacity 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.modal-overlay.active {
+    display: flex;
+    opacity: 1;
+}
+
+.modal-card {
+    background: #ffffff;
+    border-radius: 24px;
+    padding: 40px;
+    width: 90%;
+    max-width: 460px;
+    box-shadow: 0 25px 60px -12px rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(229, 231, 235, 0.5);
+    position: relative;
+    transform: translateY(-35px);
+    transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.modal-overlay.active .modal-card {
+    transform: translateY(0);
+}
+
+.modal-close {
+    position: absolute;
+    top: 24px;
+    right: 28px;
+    font-size: 2rem;
+    font-weight: 300;
+    cursor: pointer;
+    color: #9ca3af;
+    transition: var(--transition);
+    line-height: 1;
+}
+
+.modal-close:hover {
+    color: var(--text-dark);
+}
+
+.modal-logo {
+    font-size: 2.2rem;
+    font-weight: 800;
+    color: var(--text-dark);
+    margin-bottom: 12px;
+    display: inline-block;
+    letter-spacing: -0.5px;
+}
+
+.modal-logo span {
+    color: var(--primary-color);
+}
+
+.modal-header h3 {
+    font-size: 1.45rem;
+    font-weight: 800;
+    color: var(--text-dark);
+    margin-bottom: 8px;
+    letter-spacing: -0.3px;
+}
+
+.modal-header p {
+    font-size: 0.95rem;
+    color: #4b5563;
+    margin-bottom: 24px;
+    line-height: 1.6;
+    font-weight: 300;
+}
+
+.modal-tips {
+    margin-top: 28px;
+    background: #f9fafb;
+    padding: 18px;
+    border-radius: 14px;
+    font-size: 0.85rem;
+    color: #4b5563;
+    text-align: left;
+    border-left: 4px solid var(--primary-color);
+    border-top: 1px solid #f3f4f6;
+    border-bottom: 1px solid #f3f4f6;
+    border-right: 1px solid #f3f4f6;
+}
+
+/* Admin Input Styles */
+.admin-input {
+    width: 100%;
+    padding: 12px 18px;
+    border: 2px solid #e5e7eb;
+    border-radius: 12px;
+    font-family: var(--font-main);
+    font-size: 0.95rem;
+    color: var(--text-dark);
+    outline: none;
+    transition: var(--transition);
+    background-color: #f9fafb;
+}
+
+.admin-input:focus {
+    border-color: var(--primary-color);
+    background-color: #ffffff;
+    box-shadow: 0 0 0 4px var(--primary-light);
+}
+
+/* Admin Question Cards Scrollable List */
+.admin-question-card {
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 16px;
+    padding: 24px;
+    transition: var(--transition);
+    position: relative;
+    box-shadow: 0 4px 6px -1px rgba(0,0,0,0.01);
+}
+
+.admin-question-card:hover {
+    border-color: var(--primary-light);
+    box-shadow: 0 8px 16px -4px rgba(0, 0, 0, 0.04);
+}
+
+.admin-question-card h4 {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--text-dark);
+    margin-bottom: 14px;
+    padding-right: 36px;
+    line-height: 1.5;
+}
+
+.admin-question-options {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 8px;
+    margin-bottom: 14px;
+}
+
+@media (min-width: 576px) {
+    .admin-question-options {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+.admin-question-opt {
+    font-size: 0.88rem;
+    padding: 8px 12px;
+    background: #f9fafb;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    color: #4b5563;
+}
+
+.admin-question-opt.is-correct {
+    background: #d1fae5;
+    border-color: #34d399;
+    color: #065f46;
+    font-weight: 600;
+}
+
+.admin-question-explanation {
+    font-size: 0.88rem;
+    color: #6b7280;
+    border-top: 1px dashed #e5e7eb;
+    padding-top: 12px;
+    margin-top: 12px;
+    line-height: 1.5;
+}
+
+.admin-question-delete {
+    position: absolute;
+    top: 24px;
+    right: 24px;
+    color: #ef4444;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 1.1rem;
+    transition: var(--transition);
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: #fee2e2;
+}
+
+.admin-question-delete:hover {
+    background: #ef4444;
+    color: #ffffff;
+    transform: scale(1.1);
+}
+
+/* --- Android / Mobile Screen Optimizations --- */
+@media (max-width: 768px) {
+    /* Menu drawer mobile dropdown behavior */
+    .nav-user-badge {
+        flex-direction: column;
+        width: 100%;
+        max-width: 240px;
+        border-radius: 12px;
+        padding: 12px;
+        text-align: center;
+        align-items: center;
+        justify-content: center;
+        background: rgba(255, 255, 255, 0.05);
+        border-color: rgba(255, 255, 255, 0.1);
+    }
+    
+    .nav-user-badge::after {
+        content: ' ▾';
+        display: inline-block;
+    }
+    
+    .nav-user-badge.active::after {
+        transform: rotate(180deg);
+    }
+
+    .nav-user-dropdown {
+        position: static;
+        width: 100%;
+        box-shadow: none;
+        background: rgba(0, 0, 0, 0.2);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        margin-top: 10px;
+        min-width: unset;
+        border-radius: 8px;
+    }
+    
+    .nav-user-dropdown-item {
+        text-align: center;
+        padding: 12px 20px;
+    }
+
+    /* Modal Mobile Adjustments */
+    .modal-card {
+        padding: 30px 20px;
+        border-radius: 20px;
+        width: 92%;
+    }
+    
+    .modal-logo {
+        font-size: 1.8rem;
+        margin-bottom: 8px;
+    }
+    
+    .modal-header h3 {
+        font-size: 1.25rem;
+    }
+    
+    .modal-header p {
+        font-size: 0.88rem;
+        margin-bottom: 16px;
+        line-height: 1.5;
+    }
+    
+    .modal-tips {
+        margin-top: 20px;
+        padding: 14px;
+        font-size: 0.8rem;
+    }
+
+    /* Admin Panel Mobile Spacing */
+    .admin-grid {
+        gap: 24px !important;
+    }
+    
+    #dashboardAdmin {
+        padding: 60px 0;
+    }
+    
+    #dashboardAdmin .card {
+        padding: 24px 20px !important;
+    }
+    
+    .admin-question-card {
+        padding: 16px;
+    }
+    
+    .admin-question-delete {
+        top: 16px;
+        right: 16px;
+        width: 24px;
+        height: 24px;
+        font-size: 0.95rem;
+    }
+    
+    .admin-question-card h4 {
+        font-size: 0.95rem;
+        padding-right: 28px;
+    }
+}

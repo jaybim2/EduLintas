@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portal Admin - EduLintas</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/admin.css">
+    
+    <meta name="description" content="EduLintas Admin Portal: Kelola statistik lalu lintas, kuis interaktif, dan pantau kelayakan berkendara pengguna.">
+</head>
+<body class="admin-portal-body">
+
+    <!-- ==========================================
+         1. LOGIN PANEL (Tampil jika belum login)
+         ========================================== -->
+    <div id="adminLoginWrapper" class="login-wrapper" style="display: flex;">
+        <div class="login-container">
+            <div class="login-header">
+                <span class="login-logo">EduLintas<span>.</span></span>
+                <h2>Admin Portal</h2>
+                <p>Silakan masuk menggunakan akun kredensial administrator Anda.</p>
+            </div>
+            
+            <form id="formAdminLogin">
+                <div class="input-group">
+                    <label for="adminUsername">Nama Pengguna (Username)</label>
+                    <div class="input-with-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                        <input type="text" id="adminUsername" placeholder="Ketik username admin..." required autocomplete="username">
+                    </div>
+                </div>
+                
+                <div class="input-group">
+                    <label for="adminPassword">Kata Sandi (Password)</label>
+                    <div class="input-with-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                        <input type="password" id="adminPassword" placeholder="Ketik kata sandi..." required autocomplete="current-password">
+                    </div>
+                </div>
+                
+                <div id="adminLoginError" class="login-error-msg" style="display: none;">
+                    Username atau password admin salah!
+                </div>
+                
+                <button type="submit" class="btn-login-submit">
+                    Masuk Sekarang
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                </button>
+            </form>
+            
+            <div class="login-footer">
+                <a href="index.html">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+                    Kembali ke Beranda
+                </a>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- ==========================================
+         2. MAIN DASHBOARD LAYOUT (Tampil jika sudah login)
+         ========================================== -->
+    <div id="adminDashboardLayout" class="dashboard-layout" style="display: none;">
+        
+        <!-- SIDEBAR -->
+        <aside class="sidebar">
+            <div class="sidebar-brand">
+                <span class="logo">EduLintas<span>.</span></span>
+                <span class="badge-role">Admin</span>
+            </div>
+            
+            <nav class="sidebar-nav">
+                <ul>
+                    <li class="nav-item active" data-target="sectionOverview">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9"></rect><rect x="14" y="3" width="7" height="5"></rect><rect x="14" y="12" width="7" height="9"></rect><rect x="3" y="16" width="7" height="5"></rect></svg>
+                        <span>Ringkasan</span>
+                    </li>
+                    <li class="nav-item" data-target="sectionKuis">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                        <span>Kelola Kuis</span>
+                    </li>
+                    <li class="nav-item" data-target="sectionRiwayat">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+                        <span>Skor Pengendara</span>
+                    </li>
+                </ul>
+            </nav>
+            
+            <div class="sidebar-footer">
+                <div class="admin-profile">
+                    <div class="admin-avatar">DK</div>
+                    <div class="admin-info">
+                        <h4 id="adminProfileName">Della Kurnia</h4>
+                        <p>Super Administrator</p>
+                    </div>
+                </div>
+                <button id="btnAdminLogout" class="btn-logout">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+                    <span>Keluar</span>
+                </button>
+            </div>
+        </aside>
+
+        <!-- MAIN AREA -->
+        <main class="main-content">
+            
+            <!-- TOP BAR -->
+            <header class="top-bar">
+                <div class="mobile-toggle" id="btnMobileToggle">
+                    <div class="line"></div>
+                    <div class="line"></div>
+                    <div class="line"></div>
+                </div>
+                <h1 class="page-title" id="pageTitleText">Dashboard Ringkasan</h1>
+                
+                <div class="top-actions">
+                    <div class="live-clock" id="liveClock">Kamis, 04 Juni 2026 | 11:48</div>
+                    <a href="index.html" class="btn-view-site" target="_blank">
+                        Lihat Situs
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+                    </a>
+                </div>
+            </header>
+
+            <!-- CONTENT CONTAINER -->
+            <div class="content-container">
+                
+                <!-- ==============================================
+                     A. SECTION OVERVIEW (Ringkasan)
+                     ============================================== -->
+                <section id="sectionOverview" class="dashboard-section active">
+                    
+                    <!-- Stats Grid -->
+                    <div class="stats-grid-container">
+                        <div class="stats-card">
+                            <div class="stats-card-header">
+                                <span>Kecelakaan Nasional (2023)</span>
+                                <div class="stats-icon alert">🚨</div>
+                            </div>
+                            <div class="stats-card-body">
+                                <h3 id="statValKecelakaan">0</h3>
+                                <p class="stats-trend down">Sumber: Korlantas Polri</p>
+                            </div>
+                        </div>
+                        
+                        <div class="stats-card">
+                            <div class="stats-card-header">
+                                <span>Pelanggaran Polda Metro</span>
+                                <div class="stats-icon warning">📸</div>
+                            </div>
+                            <div class="stats-card-body">
+                                <h3 id="statValPelanggaran">0</h3>
+                                <p class="stats-trend up">Sistem ETLE & Manual</p>
+                            </div>
+                        </div>
+                        
+                        <div class="stats-card">
+                            <div class="stats-card-header">
+                                <span>Pelanggaran Operasi</span>
+                                <div class="stats-icon info">👮</div>
+                            </div>
+                            <div class="stats-card-body">
+                                <h3 id="statValOperasi">0</h3>
+                                <p class="stats-trend">1 Periode Razia</p>
+                            </div>
+                        </div>
+
+                        <div class="stats-card">
+                            <div class="stats-card-header">
+                                <span>Total Soal Kuis</span>
+                                <div class="stats-icon success">📚</div>
+                            </div>
+                            <div class="stats-card-body">
+                                <h3 id="statValTotalKuis">0</h3>
+                                <p class="stats-trend text-emerald">Aktif di Kuis Utama</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Grid Layout Form Statistik & Chart/Info -->
+                    <div class="dashboard-row">
+                        
+                        <!-- Form Edit Statistik -->
+                        <div class="panel-card col-6">
+                            <div class="panel-header">
+                                <h3>📊 Perbarui Angka Statistik Utama</h3>
+                            </div>
+                            <div class="panel-body">
+                                <form id="formAdminStats">
+                                    <div class="form-group">
+                                        <label for="inputKecelakaan">Jumlah Kecelakaan Nasional:</label>
+                                        <input type="number" id="inputKecelakaan" class="panel-input" required>
+                                        <span class="input-tip">Diperlihatkan di halaman utama EduLintas.</span>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="inputPelanggaran">Pelanggaran Terdata (Polda Metro):</label>
+                                        <input type="number" id="inputPelanggaran" class="panel-input" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="inputOperasi">Pelanggaran Operasi (Sandi Razia):</label>
+                                        <input type="number" id="inputOperasi" class="panel-input" required>
+                                    </div>
+                                    <button type="submit" class="btn btn-save">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
+                                        Simpan Perubahan
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+
+                        <!-- Panel Analisis Visual SVG -->
+                        <div class="panel-card col-6">
+                            <div class="panel-header">
+                                <h3>📈 Tren Kesadaran Berkendara</h3>
+                            </div>
+                            <div class="panel-body flex-center" style="position: relative;">
+                                <!-- SVG Chart Dinamis -->
+                                <div class="svg-chart-container">
+                                    <svg viewBox="0 0 500 200" class="mini-chart">
+                                        <!-- Grid lines -->
+                                        <line x1="50" y1="20" x2="450" y2="20" stroke="rgba(255,255,255,0.05)" />
+                                        <line x1="50" y1="70" x2="450" y2="70" stroke="rgba(255,255,255,0.05)" />
+                                        <line x1="50" y1="120" x2="450" y2="120" stroke="rgba(255,255,255,0.05)" />
+                                        <line x1="50" y1="170" x2="450" y2="170" stroke="rgba(255,255,255,0.1)" stroke-width="2" />
+                                        
+                                        <!-- Chart Line -->
+                                        <path d="M50 160 Q 150 140 250 80 T 450 30" fill="none" stroke="var(--primary-color)" stroke-width="4" stroke-linecap="round" />
+                                        
+                                        <!-- Glowing dots -->
+                                        <circle cx="50" cy="160" r="6" fill="#10b981" />
+                                        <circle cx="150" cy="142" r="6" fill="#10b981" />
+                                        <circle cx="250" cy="80" r="6" fill="#10b981" />
+                                        <circle cx="450" cy="30" r="6" fill="#10b981" />
+                                        
+                                        <!-- Labels -->
+                                        <text x="50" y="190" fill="#9ca3af" font-size="11" text-anchor="middle">Feb</text>
+                                        <text x="150" y="190" fill="#9ca3af" font-size="11" text-anchor="middle">Mar</text>
+                                        <text x="250" y="190" fill="#9ca3af" font-size="11" text-anchor="middle">Apr</text>
+                                        <text x="450" y="190" fill="#9ca3af" font-size="11" text-anchor="middle">Mei</text>
+                                        
+                                        <text x="45" y="25" fill="#9ca3af" font-size="11" text-anchor="end">Tinggi</text>
+                                        <text x="45" y="175" fill="#9ca3af" font-size="11" text-anchor="end">Rendah</text>
+                                    </svg>
+                                </div>
+                                <div class="chart-summary">
+                                    <h4>Tingkat Kelayakan Pengendara Naik</h4>
+                                    <p>Berdasarkan simulasi kuis dari data lokal, terjadi peningkatan kelulusan kuis sebesar 24% pada bulan lalu.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+
+                <!-- ==============================================
+                     B. SECTION KUIS (Kelola Kuis)
+                     ============================================== -->
+                <section id="sectionKuis" class="dashboard-section">
+                    <div class="dashboard-row">
+                        
+                        <!-- Form Tambah Kuis -->
+                        <div class="panel-card col-5">
+                            <div class="panel-header">
+                                <h3>📝 Tambah Soal Kuis Baru</h3>
+                            </div>
+                            <div class="panel-body">
+                                <form id="formAdminAddQuestion">
+                                    <div class="form-group">
+                                        <label for="newQuestion">Pertanyaan Kuis:</label>
+                                        <textarea id="newQuestion" class="panel-input" style="height: 90px; resize: none;" placeholder="Ketik pertanyaan kuis yang komprehensif..." required></textarea>
+                                    </div>
+                                    
+                                    <div class="form-row">
+                                        <div class="form-group col-6">
+                                            <label for="optA">Opsi A:</label>
+                                            <input type="text" id="optA" class="panel-input" required placeholder="Opsi A">
+                                        </div>
+                                        <div class="form-group col-6">
+                                            <label for="optB">Opsi B:</label>
+                                            <input type="text" id="optB" class="panel-input" required placeholder="Opsi B">
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="form-row">
+                                        <div class="form-group col-6">
+                                            <label for="optC">Opsi C:</label>
+                                            <input type="text" id="optC" class="panel-input" required placeholder="Opsi C">
+                                        </div>
+                                        <div class="form-group col-6">
+                                            <label for="optD">Opsi D:</label>
+                                            <input type="text" id="optD" class="panel-input" required placeholder="Opsi D">
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label for="correctIndex">Kunci Jawaban:</label>
+                                        <select id="correctIndex" class="panel-input" required>
+                                            <option value="0">Opsi A</option>
+                                            <option value="1">Opsi B</option>
+                                            <option value="2">Opsi C</option>
+                                            <option value="3">Opsi D</option>
+                                        </select>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label for="explanation">Penjelasan Jawaban:</label>
+                                        <textarea id="explanation" class="panel-input" style="height: 80px; resize: none;" placeholder="Sertakan dasar hukum atau penjelasan logis..." required></textarea>
+                                    </div>
+                                    
+                                    <button type="submit" class="btn btn-save" style="width: 100%;">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                                        Simpan Soal Baru
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+
+                        <!-- Daftar Soal Kuis -->
+                        <div class="panel-card col-7">
+                            <div class="panel-header" style="display: flex; justify-content: space-between; align-items: center;">
+                                <h3>📚 Daftar Soal Kuis Aktif</h3>
+                                <span class="badge-count" id="adminActiveQuestionsCount">0 Soal</span>
+                            </div>
+                            <div class="panel-body">
+                                <div class="questions-list-wrapper" id="adminQuizList">
+                                    <!-- Injeksi JS -->
+                                    <div class="loading-state">Memuat soal kuis...</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+
+                <!-- ==============================================
+                     C. SECTION RIWAYAT (Skor Pengendara)
+                     ============================================== -->
+                <section id="sectionRiwayat" class="dashboard-section">
+                    <div class="panel-card">
+                        <div class="panel-header" style="display: flex; justify-content: space-between; align-items: center;">
+                            <h3>🏆 Evaluasi Kelayakan & Riwayat Kuis Pengendara</h3>
+                            <button id="btnResetAllScores" class="btn-reset-scores">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"></path><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
+                                Bersihkan Riwayat
+                            </button>
+                        </div>
+                        <div class="panel-body">
+                            <p style="margin-bottom: 20px; color: #9ca3af; font-size: 0.95rem;">Tabel berikut mencatat nama pengguna yang telah menyelesaikan kuis, skor pencapaian, status kelayakan berkendara di jalan raya, dan waktu pengerjaan.</p>
+                            
+                            <div class="table-container">
+                                <table class="admin-table">
+                                    <thead>
+                                        <tr>
+                                            <th>No.</th>
+                                            <th>Nama Pengendara</th>
+                                            <th>Username</th>
+                                            <th>Skor Akhir</th>
+                                            <th>Status Evaluasi</th>
+                                            <th>Waktu Pengerjaan</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tableScoresBody">
+                                        <!-- Injeksi JS -->
+                                        <tr>
+                                            <td colspan="6" class="text-center" style="padding: 40px; color:#9ca3af;">Belum ada pengendara yang mengikuti kuis.</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                
+            </div>
+        </main>
+    </div>
+
+    <script src="js/admin.js"></script>
+</body>
+</html>

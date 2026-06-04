@@ -88,13 +88,37 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }, { threshold: 0.5 }); // Starts when 50% visible
 
+    // --- Initialize Statistics from LocalStorage ---
+    const initStatistics = () => {
+        const stats = {
+            kecelakaan: localStorage.getItem('stat_kecelakaan') || '152000',
+            pelanggaran: localStorage.getItem('stat_pelanggaran') || '817069',
+            operasi: localStorage.getItem('stat_operasi') || '30468'
+        };
+
+        if (!localStorage.getItem('stat_kecelakaan')) {
+            localStorage.setItem('stat_kecelakaan', stats.kecelakaan);
+            localStorage.setItem('stat_pelanggaran', stats.pelanggaran);
+            localStorage.setItem('stat_operasi', stats.operasi);
+        }
+
+        const statKecelakaanEl = document.getElementById('statKecelakaan');
+        const statPelanggaranEl = document.getElementById('statPelanggaran');
+        const statOperasiEl = document.getElementById('statOperasi');
+
+        if (statKecelakaanEl) statKecelakaanEl.setAttribute('data-target', stats.kecelakaan);
+        if (statPelanggaranEl) statPelanggaranEl.setAttribute('data-target', stats.pelanggaran);
+        if (statOperasiEl) statOperasiEl.setAttribute('data-target', stats.operasi);
+    };
+    initStatistics();
+
     counters.forEach(counter => {
         counter.innerText = '0'; // Set to 0 initially
         counterObserver.observe(counter);
     });
 
     // --- Interactive Quiz Logic ---    
-    const quizQuestions = [
+    const defaultQuestions = [
         {
             question: "Apa yang paling tepat dilakukan jika terkena tilang padahal Anda merasa surat-surat sudah lengkap?",
             options: [
@@ -192,6 +216,11 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     ];
 
+    if (!localStorage.getItem('edu_quiz_questions')) {
+        localStorage.setItem('edu_quiz_questions', JSON.stringify(defaultQuestions));
+    }
+    let quizQuestions = JSON.parse(localStorage.getItem('edu_quiz_questions'));
+
     let currentQuestionIndex = 0;
     let score = 0;
 
@@ -272,19 +301,46 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 1200);
     };
 
+    const saveQuizScore = (finalScore) => {
+        const sessionStr = localStorage.getItem('edu_session');
+        if (sessionStr) {
+            const session = JSON.parse(sessionStr);
+            if (session.role === 'Pengendara') {
+                const totalQuestions = quizQuestions.length;
+                const scorePercentage = (finalScore / totalQuestions) * 100;
+                const status = scorePercentage >= 70 ? "Layak Berkendara 🟢" : "Butuh Belajar Lagi 🔴";
+                
+                localStorage.setItem(`edu_score_${session.username}`, JSON.stringify({
+                    score: `${finalScore} / ${totalQuestions}`,
+                    status: status,
+                    timestamp: new Date().toLocaleString('id-ID')
+                }));
+                
+                // Update User Dashboard UI instan
+                updateUserDashboard(session);
+            }
+        }
+    };
+
     const showResult = () => {
         if (quizFeedbackPanel) quizFeedbackPanel.style.display = 'none';
         if (quizResultPanel) quizResultPanel.style.display = 'flex';
 
-        resultScore.innerText = `${score} / ${quizQuestions.length}`;
+        const totalQuestions = quizQuestions.length;
+        resultScore.innerText = `${score} / ${totalQuestions}`;
 
-        if (score === 10) {
+        // Simpan skor kuis
+        saveQuizScore(score);
+
+        const pct = (score / totalQuestions) * 100;
+
+        if (pct === 100) {
             resultEmoji.innerText = "🏆";
             resultMessage.innerText = "Luar biasa! Anda memiliki pemahaman yang sangat akurat tentang hukum lalu lintas Indonesia.";
-        } else if (score >= 7) {
+        } else if (pct >= 70) {
             resultEmoji.innerText = "👍";
             resultMessage.innerText = "Skor Anda bagus. Anda sudah menguasai sebagian besar aturan lalu lintas.";
-        } else if (score >= 4) {
+        } else if (pct >= 40) {
             resultEmoji.innerText = "📚";
             resultMessage.innerText = "Cukup baik, tetapi ada baiknya membaca lagi seksi materi dan sanksi agar lebih waspada di jalan raya.";
         } else {
@@ -296,6 +352,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // Events attachment securely
     if (btnStartQuiz) {
         btnStartQuiz.addEventListener('click', () => {
+            // Re-fetch pertanyaan untuk merekam penambahan/penghapusan admin
+            quizQuestions = JSON.parse(localStorage.getItem('edu_quiz_questions')) || defaultQuestions;
             currentQuestionIndex = 0;
             score = 0;
             renderQuestion();
@@ -321,5 +379,215 @@ document.addEventListener('DOMContentLoaded', () => {
             if (quizStartPanel) quizStartPanel.style.display = 'flex';
         });
     }
+
+    // ==========================================================================
+    // MULTI-ROLE AUTHENTICATION (localStorage-based)
+    // ==========================================================================
+
+    const demoUsers = [
+        { username: 'pengendara', password: 'user123', name: 'Budi Santoso', role: 'Pengendara' },
+        { username: 'admin', password: 'admin123', name: 'Della Kurnia', role: 'Admin' }
+    ];
+
+    const loginModal = document.getElementById('loginModal');
+    const btnShowLogin = document.getElementById('btnShowLogin');
+    const btnCloseLogin = document.getElementById('btnCloseLogin');
+    const formLogin = document.getElementById('formLogin');
+    const loginUsernameInput = document.getElementById('loginUsername');
+    const loginPasswordInput = document.getElementById('loginPassword');
+    const loginErrorMessage = document.getElementById('loginErrorMessage');
+    const navAuthContainer = document.getElementById('navAuthContainer');
+
+    const dashboardPengendara = document.getElementById('dashboardPengendara');
+    const userDashboardName = document.getElementById('userDashboardName');
+    const userLastScore = document.getElementById('userLastScore');
+    const userSafetyStatus = document.getElementById('userSafetyStatus');
+
+    // --- Modal Actions ---
+    const showLogin = () => {
+        if (loginModal) {
+            loginModal.style.display = 'flex';
+            setTimeout(() => loginModal.classList.add('active'), 10);
+            document.body.style.overflow = 'hidden';
+            
+            // Tutup menu mobile jika sedang terbuka
+            if (navLinks && navLinks.classList.contains('active-menu')) {
+                navLinks.classList.remove('active-menu');
+                if (mobileMenuBtn) mobileMenuBtn.classList.remove('active');
+            }
+        }
+    };
+
+    const hideLogin = () => {
+        if (loginModal) {
+            loginModal.classList.remove('active');
+            setTimeout(() => loginModal.style.display = 'none', 300);
+            document.body.style.overflow = '';
+            if (formLogin) formLogin.reset();
+            if (loginErrorMessage) loginErrorMessage.style.display = 'none';
+        }
+    };
+
+    if (btnShowLogin) btnShowLogin.addEventListener('click', showLogin);
+    if (btnCloseLogin) btnCloseLogin.addEventListener('click', hideLogin);
+    if (loginModal) {
+        loginModal.addEventListener('click', (e) => {
+            if (e.target === loginModal) hideLogin();
+        });
+    }
+
+    // --- Form Login Handler ---
+    if (formLogin) {
+        formLogin.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const username = loginUsernameInput.value.trim().toLowerCase();
+            const password = loginPasswordInput.value;
+
+            const user = demoUsers.find(u => u.username === username && u.password === password);
+
+            if (user) {
+                // Simpan Sesi
+                localStorage.setItem('edu_session', JSON.stringify({
+                    name: user.name,
+                    username: user.username,
+                    role: user.role
+                }));
+                hideLogin();
+                checkSession();
+                
+                // Gulir secara halus ke bagian dashboard baru jika pengendara, atau redirect ke admin.html jika admin
+                setTimeout(() => {
+                    if (user.role === 'Pengendara' && dashboardPengendara) {
+                        dashboardPengendara.scrollIntoView({ behavior: 'smooth' });
+                    } else if (user.role === 'Admin') {
+                        window.location.href = 'admin.html';
+                    }
+                }, 400);
+            } else {
+                if (loginErrorMessage) loginErrorMessage.style.display = 'block';
+            }
+        });
+    }
+
+    // --- User Dashboard Handler ---
+    const updateUserDashboard = (session) => {
+        if (userDashboardName) userDashboardName.innerText = session.name;
+        
+        const lastScoreData = localStorage.getItem(`edu_score_${session.username}`);
+        if (lastScoreData) {
+            const data = JSON.parse(lastScoreData);
+            if (userLastScore) userLastScore.innerText = data.score;
+            if (userSafetyStatus) {
+                userSafetyStatus.innerText = data.status;
+                if (data.status.includes('Layak')) {
+                    userSafetyStatus.style.color = '#059669'; // Emerald
+                } else {
+                    userSafetyStatus.style.color = '#dc2626'; // Red
+                }
+            }
+        } else {
+            if (userLastScore) userLastScore.innerText = '-';
+            if (userSafetyStatus) {
+                userSafetyStatus.innerText = 'Belum Mengikuti Kuis';
+                userSafetyStatus.style.color = '#b45309'; // Amber
+            }
+        }
+    };
+
+    // --- Active Session Manager & UI Renderer ---
+    const checkSession = () => {
+        const sessionStr = localStorage.getItem('edu_session');
+
+        if (sessionStr) {
+            const session = JSON.parse(sessionStr);
+
+            // Jika pengguna yang aktif adalah admin, alihkan ke admin.html
+            if (session.role === 'Admin') {
+                window.location.href = 'admin.html';
+                return;
+            }
+
+            // Ubah Navbar menjadi badge Profil Dropdown
+            if (navAuthContainer) {
+                navAuthContainer.innerHTML = `
+                    <div class="nav-user-badge" id="navUserBadge">
+                        👤 ${session.name}
+                        <div class="nav-user-dropdown" id="navUserDropdown">
+                            <div class="nav-user-dropdown-item" id="btnScrollDashboard">Dashboard Saya</div>
+                            <div class="nav-user-dropdown-item logout-item" id="btnLogout">Keluar</div>
+                        </div>
+                    </div>
+                `;
+
+                // Event dropdown profil
+                const navUserBadge = document.getElementById('navUserBadge');
+                const navUserDropdown = document.getElementById('navUserDropdown');
+                
+                if (navUserBadge && navUserDropdown) {
+                    navUserBadge.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        navUserDropdown.classList.toggle('active');
+                        navUserBadge.classList.toggle('active');
+                    });
+                    
+                    document.addEventListener('click', () => {
+                        navUserDropdown.classList.remove('active');
+                        navUserBadge.classList.remove('active');
+                    });
+                }
+
+                // Scroll ke dashboard
+                const btnScrollDashboard = document.getElementById('btnScrollDashboard');
+                if (btnScrollDashboard) {
+                    btnScrollDashboard.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        navUserDropdown.classList.remove('active');
+                        navUserBadge.classList.remove('active');
+                        
+                        // Tutup menu mobile jika sedang terbuka
+                        if (navLinks && navLinks.classList.contains('active-menu')) {
+                            navLinks.classList.remove('active-menu');
+                            if (mobileMenuBtn) mobileMenuBtn.classList.remove('active');
+                        }
+                        
+                        if (session.role === 'Pengendara' && dashboardPengendara) {
+                            dashboardPengendara.scrollIntoView({ behavior: 'smooth' });
+                        }
+                    });
+                }
+
+                // Log out action
+                const btnLogout = document.getElementById('btnLogout');
+                if (btnLogout) {
+                    btnLogout.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        localStorage.removeItem('edu_session');
+                        checkSession();
+                        alert("Anda telah berhasil keluar dari akun.");
+                        window.location.reload(); // Reload untuk mereset element halaman
+                    });
+                }
+            }
+
+            // Tampilkan Panel Sesuai Peran
+            if (session.role === 'Pengendara') {
+                if (dashboardPengendara) dashboardPengendara.style.display = 'block';
+                updateUserDashboard(session);
+            }
+
+        } else {
+            // Jika Belum Login
+            if (navAuthContainer) {
+                navAuthContainer.innerHTML = `<button class="btn-login-nav" id="btnShowLogin">Masuk</button>`;
+                const newBtnShowLogin = document.getElementById('btnShowLogin');
+                if (newBtnShowLogin) newBtnShowLogin.addEventListener('click', showLogin);
+            }
+
+            if (dashboardPengendara) dashboardPengendara.style.display = 'none';
+        }
+    };
+
+    // Jalankan pengecekan sesi saat halaman dimuat
+    checkSession();
 
 });
